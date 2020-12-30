@@ -1,0 +1,27 @@
+version: "3.6" 
+
+services:
+  postman-openapi-converter:
+    build: .
+    image: postman-openapi-converter
+    volumes:
+      - .:/usr/app/
+    environment:
+      POSTMANE_COLLECTION_FILE: /collections/collection.json
+      OPENAPI_OUTPUT_FILE: /api/collection.yml
+    networks:
+      - xenet
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./api:/usr/share/nginx/html/swagger
+    environment:
+      API_URL: swagger/collection.yml
+
+networks:
+  xenet:
+    external: true
